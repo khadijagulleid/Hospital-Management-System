@@ -1,10 +1,8 @@
-// OOP Assignment 3
-// Hospital Management System
-
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 
-// OOP Assignment 3
-// Adding user input and exception handling
+// OOP Assignment 4
 
 public class Main {
 
@@ -12,47 +10,58 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
 
+        ArrayList<Patient> patients = new ArrayList<>();
+
         try {
 
-            System.out.println("Enter doctor name:");
-            String dName = input.nextLine();
-
-            System.out.println("Enter doctor age:");
-            int dAge = input.nextInt();
+            System.out.println("How many patients do you want to enter?");
+            int number = input.nextInt();
             input.nextLine();
 
-            System.out.println("Enter specialization:");
-            String spec = input.nextLine();
+            for(int i = 0; i < number; i++){
 
-            System.out.println("Enter salary:");
-            double dSalary = input.nextDouble();
-            input.nextLine();
+                System.out.println("Enter patient name:");
+                String name = input.nextLine();
 
-            Doctor doctor1 = new Doctor(dName, dAge, "D01", spec, dSalary);
+                System.out.println("Enter age:");
+                int age = input.nextInt();
+                input.nextLine();
 
-            System.out.println("Enter patient name:");
-            String pName = input.nextLine();
+                System.out.println("Enter illness:");
+                String illness = input.nextLine();
 
-            System.out.println("Enter patient age:");
-            int pAge = input.nextInt();
-            input.nextLine();
+                Patient p = new Patient(name, age, illness);
+                patients.add(p);
+            }
 
-            System.out.println("Enter illness:");
-            String illness = input.nextLine();
+            // save to file
+            BufferedWriter writer = new BufferedWriter(new FileWriter("patients.txt"));
 
-            Patient patient1 = new Patient(pName, pAge, illness);
+            for(Patient p : patients){
+                writer.write(p.getName() + "," + p.getAge() + "," + p.getIllness());
+                writer.newLine();
+            }
 
-            System.out.println();
-            doctor1.displayInfo();
-            System.out.println();
-            patient1.displayInfo();
+            writer.close();
+            System.out.println("Saved to file");
 
-            doctor1.treatPatient();
+            // read from file
+            BufferedReader reader = new BufferedReader(new FileReader("patients.txt"));
 
-        } catch (Exception e) {
-            System.out.println("Error: invalid input. Please enter correct data.");
+            String line;
+
+            System.out.println("Data from file:");
+
+            while((line = reader.readLine()) != null){
+                System.out.println(line);
+            }
+
+            reader.close();
+
+        } catch (Exception e){
+            System.out.println("Error happened");
         } finally {
-            System.out.println("Program ended.");
+            System.out.println("Program finished");
         }
 
         input.close();
